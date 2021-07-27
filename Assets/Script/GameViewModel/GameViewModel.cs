@@ -12,6 +12,10 @@ public class GameViewModel : MonoBehaviour
     private BeadScript selectedBead = null;
     private int currentPlayr = 2, cutPosition = -1;
 
+    // Promote King
+    private bool isPromoteKing = false;
+    private int promoteKingPos = -1;
+
     public void ClickBead(BeadScript script)
     {
        
@@ -84,13 +88,34 @@ public class GameViewModel : MonoBehaviour
         bead.ActiveSite(currentPlayr);
         CheakForceMove.CheakFM(GameData.Board, GameData.CutPosition, Viewdata.beadData, 1, 2, currentPlayr);
         ind.HighliteMoveables(GameData.ForceCutBeadList, GameData.Gotopos, GameData.Board, 0, board.allPositions, currentPlayr);
-        SetKing.SetBeadKing(GameData.Board, 1, Viewdata.beadData);
+        //SetKing.SetBeadKing(GameData.Board, 1, Viewdata.beadData);
+
+        // promote king
+        if (isPromoteKing)
+        {
+            isPromoteKing = false;
+            for (int i = 0, len = Viewdata.beadData.Count; i < len; i++)
+            {
+                BeadScript script = Viewdata.beadData[i];
+                if (script.isAlive && script.currentPos == promoteKingPos)
+                {
+                    script.MakeItKing(); // make king on UI
+                }
+            }
+        }
+    }
+
+    private void PromoteKing(int kingPosition)
+    {
+        isPromoteKing = true;
+        promoteKingPos = kingPosition;
     }
 
     void Start()
     {
         moveBead.MoveStart += MoveMiddle;
         moveBead.MoveComplete += MoveComplete;
+        NormalMove.PromoteKing += PromoteKing;
 
         board.DrowGameBoard();
         ind.StoreHighliteIndicators(board.SquareSize, ClickIndicator);
@@ -104,5 +129,6 @@ public class GameViewModel : MonoBehaviour
     {
         moveBead.MoveStart -= MoveMiddle;
         moveBead.MoveComplete -= MoveComplete;
+        NormalMove.PromoteKing -= PromoteKing;
     }
 }

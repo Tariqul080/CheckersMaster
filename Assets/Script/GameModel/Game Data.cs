@@ -4,32 +4,32 @@ namespace GameModel
     public static class GameData
     {
         internal static List<int> ForceCutBeadList = new List<int>();
+
+        internal const int TopBead = 1, BottomBead = 2;
         
         public static readonly int[,] Board =
          {
+            // {0, 1, 0, 1, 0, 1, 0, 1 },
+            // {1, 0, 1, 0, 1, 0, 1, 0 },
+            // {0, 1, 0, 1, 0, 1, 0, 1 },
+            // {0, 0, 0, 0, 0, 0, 0, 0 },
+            // {0, 0, 0, 0, 0, 0, 0, 0 },
+            // {2, 0, 2, 0, 2, 0, 2, 0 },
+            // {0, 2, 0, 2, 0, 2, 0, 2 },
+            // {2, 0, 2, 0, 2, 0, 2, 0 },
 
-            {0, 1, 0, 1, 0, 1, 0, 1 },
-            {1, 0, 1, 0, 1, 0, 1, 0 },
-            {0, 1, 0, 1, 0, 1, 0, 1 },
+            {0, 0, 0, 0, 0, 0, 0, 0 },
+            {0, 0, 1, 0, 0, 0, 0, 0 },
+            {0, 0, 0, 2, 0, 0, 0, 0 },
             {0, 0, 0, 0, 0, 0, 0, 0 },
             {0, 0, 0, 0, 0, 0, 0, 0 },
-            {2, 0, 2, 0, 2, 0, 2, 0 },
+            {2, 0, 2, 0, 0, 0, 2, 0 },
             {0, 2, 0, 2, 0, 2, 0, 2 },
             {2, 0, 2, 0, 2, 0, 2, 0 },
-
          };
 
-         internal static readonly bool[,] KingBoard =
-         {
-            {true,  true,  true,  true,  true,  true,  true,   true},
-            {false, false, false, false, false, false, false, false},
-            {false, false, false, false, false, false, false, false},
-            {false, false, false, false, false, false, false, false},
-            {false, false, false, false, false, false, false, false},
-            {false, false, false, false, false, false, false, false},
-            {false, false, false, false, false, false, false, false},
-            {true,  true,  true,  true,  true,  true,  true,   true},
-         };
+         // store king position info
+         public static bool[,] kingBoard = new bool[8, 8];
 
         internal static readonly int[][] Gotopos =
          {

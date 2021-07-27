@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+
 namespace View 
 {
     public class BeadScript : MonoBehaviour
@@ -8,6 +9,7 @@ namespace View
         [SerializeField] private Button BeadPrefeb = null;
         [SerializeField] private Sprite DarkBead = null;
         [SerializeField] private Sprite LightBead = null;
+        [SerializeField] private Image KingImg = null;
 
         internal int currentPos= -1;
         internal int beadID = -1;
@@ -41,6 +43,12 @@ namespace View
             {
                 BeadPrefeb.interactable = this.bead == bead;
             }
+        }
+
+        internal void MakeItKing()
+        {
+            isKing = true;
+            KingImg.enabled = true;
         }
     }
 }
