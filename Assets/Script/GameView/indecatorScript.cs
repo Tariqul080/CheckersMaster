@@ -19,10 +19,8 @@ namespace View
             IndecatorFeb.onClick.AddListener(delegate
             {
                 click?.Invoke(this);
-                Debug.Log("currentpos" + currentpos);
             });
         }
-
         internal void Active(bool isActive)
         {
             IndecatorFeb.interactable = isActive;

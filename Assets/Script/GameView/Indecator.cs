@@ -47,9 +47,9 @@ namespace View
         }
 
         //Cheaking Moveable Beads.
-        internal void HighliteMoveables(List<int> cutableBead, int[][] movePos, int[,]gameBoard, int empty, Vector2[,]allPoints, int player)
+        internal void HighliteMoveables(List<int> cutableBead, int[][] movePos, int[,]gameBoard, bool[,] kingBoard, Vector2[,]allPoints, int player)
         {
-            int counter = -1, indicatorCounter = 0;
+            int counter = -1, indicatorCounter = 0, Empty = Viewdata.Empty;
             int indecatorValu = 0;
             if (cutableBead.Count!=0)
             {
@@ -73,20 +73,35 @@ namespace View
                     {
                         counter++;
                         int boardPosValu = gameBoard[row, col];
-                        if (boardPosValu == empty || player != boardPosValu) continue;
+                        if (boardPosValu == Empty  || player != boardPosValu) continue;
                         int[] index = movePos[counter];
+                        int BeadCol = counter % 8;
+                        int BeadRow = (counter - BeadCol) / 8;
+                        bool king = kingBoard[BeadRow , BeadCol];
                         for (int i = 0; i < index.Length; i++)
                         {
                             int indexValu = index[i];
                             int colum = indexValu % 8;
                             int Row = (indexValu - colum) / 8;
                             int valu = gameBoard[Row, colum];
-                            if (valu == empty)
+                            if(valu == Empty && king == false && player == Viewdata.TopBead && BeadRow < Row)
+                            {
+                                indecatorValu++;
+                            }
+                            else if(king == true && player == Viewdata.TopBead && valu == Empty)
+                            {
+                                indecatorValu++;
+                            }
+                            else if(valu == Empty && king == false && player == Viewdata.BottomBead && BeadRow > Row)
+                            {
+                                indecatorValu++;
+                            }
+                            else if(king == true && player == Viewdata.BottomBead && valu == Empty )
                             {
                                 indecatorValu++;
                             }
                         }
-                        if (indecatorValu == empty) continue;
+                        if (indecatorValu == Empty) continue;
                         HighliteIndicators[indicatorCounter].transform.localPosition = allPoints[row, col];
                         HighliteIndicators[indicatorCounter].Active(true);
                         HighliteIndicators[indicatorCounter].currentpos = (row * 8) + col;
@@ -95,14 +110,17 @@ namespace View
                     }
                 }
             }
-             Debug.Log("IndecattorCounter  :"+indicatorCounter);
         }
 
         //Move Point Identify..
-        internal void MoveAllowPos(int[][]movePos, int [,]gameBoard, Vector2 Size, Vector2[,] allPoints, int beadCourrentPos)
+        internal void MoveAllowPos(int[][]movePos, int [,]gameBoard, bool [,] kingBoard, Vector2 Size, Vector2[,] allPoints, int beadCourrentPos)
         {
+            int beadCol = beadCourrentPos % 8;
+            int beadRow = (beadCourrentPos - beadCol) / 8;
+            bool king = kingBoard[beadRow , beadCol];
+            int beadValu = gameBoard[beadRow , beadCol]; 
             int[] MovePoint = movePos[beadCourrentPos];
-            for (int i = 0; i <MovePoint.Length; i++)
+            for (int i = 0, x = MovePoint.Length; i < x; i++)
             {
                 if (i > 3) return;
                 int positionID = MovePoint[i];
@@ -110,6 +128,20 @@ namespace View
                 int Row = (positionID - colum) / 8;
                 int valu = gameBoard[Row, colum];
                 if (valu != 0) continue;
+                if(beadValu == Viewdata.TopBead && king == false && beadRow < Row)
+                {
+                    moveIndicators[i].currentpos = positionID;
+                    moveIndicators[i].Active(true);
+                    moveIndicators[i].transform.localPosition = allPoints[Row, colum];
+                }
+                else if(beadValu == Viewdata.BottomBead && king == false && beadRow > Row)
+                {
+                    moveIndicators[i].currentpos = positionID;
+                    moveIndicators[i].Active(true);
+                    moveIndicators[i].transform.localPosition = allPoints[Row, colum];
+
+                }
+                if(king == false ) continue;
                 moveIndicators[i].currentpos = positionID;
                 moveIndicators[i].Active(true);
                 moveIndicators[i].transform.localPosition = allPoints[Row, colum];

@@ -23,13 +23,9 @@ namespace GameModel
             int valu = board[row, col];
             return valu;
         }
-
-          //update 27-7-21
-        internal static void CheakFM(int[,] Board, int[][] Cutpos, List<BeadScript> allBeads, int top, int bottom, int PlayerMove )
+        internal static void CheakFM(int[,] Board, int[][] Cutpos, bool[,] kingBoard, int PlayerMove )
         {
-            BeadScript Bead = null;
             int counter = -1;
-            int empty = 0;
             List<int> forceMB = new List<int>();
             GameData.ForceCutBeadList.Clear();
 
@@ -39,15 +35,16 @@ namespace GameModel
                 {
                     counter++;
                     int pointValu = Board[row, col];
-                    if (pointValu == empty || pointValu!=PlayerMove) continue;
+                    if (pointValu == GameData.Empty || pointValu!=PlayerMove) continue;
 
                     if (pointValu==PlayerMove)
                     {
                         int[] BeadPosition = ArrayPoint(counter);
                         int beadRow = BeadPosition[0];
                         int beadColum = BeadPosition[1];
+                        bool CheckKing = kingBoard[beadRow , beadColum];
                         int[] MoveCutPosIndex = Cutpos[counter];
-                        for (byte index = 0; index < MoveCutPosIndex.Length ; index++)
+                        for (int index = 0, leg = MoveCutPosIndex.Length; index < leg ; index++)
                         {
                             int CutMovePos = MoveCutPosIndex[index];
                             int[] CutMovePosArr=ArrayPoint(CutMovePos);
@@ -58,45 +55,34 @@ namespace GameModel
                             int cutBeadCol = (beadColum + CutMovePosColum) / 2;
                             int cutBeadValu = Board[cutBeadRow, cutBeadCol];
                             int CutMovePosValu = PointValu(CutMovePosArr, Board);
-                            if (CutMovePosValu!=empty || cutBeadValu==empty || cutBeadValu==PlayerMove) continue;
-                            for(int number = 0; number<allBeads.Count; number++)
-                                {
-                                    BeadScript beads = allBeads[number];
-                                    if(beads.currentPos == counter)
-                                    {
-                                        Bead = beads;
-                                    }
-                                }
-                            if (PlayerMove==top)
+
+                            if (CutMovePosValu != GameData.Empty || cutBeadValu == GameData.Empty || cutBeadValu == PlayerMove) continue;
+                            if (PlayerMove == GameData.TopBead)
                             {
-                                if ( Bead.isKing == false)
+                                if ( CheckKing == false)
                                 {
                                     if (beadRow < CutMovePosRow)
                                     {
                                         forceMB.Add(counter);
-                                        Bead = null;
                                     }
                                 }
                                 else
                                 {
                                     forceMB.Add(counter);
-                                    Bead = null;
                                 }
                             }
-                            else if (PlayerMove == bottom)
+                            else if (PlayerMove == GameData.BottomBead)
                             {
-                                if (Bead.isKing == false)
+                                if (CheckKing == false)
                                 {
                                     if (beadRow > CutMovePosRow)
                                     {
                                         forceMB.Add(counter);
-                                        Bead = null;
                                     }
                                 }
                                 else
                                 {
                                     forceMB.Add(counter);
-                                    Bead = null;
                                 }
                             }
                         }
@@ -105,7 +91,7 @@ namespace GameModel
                 }
             }
             forceMB.Sort();
-            if (forceMB.Count != empty)
+            if (forceMB.Count != GameData.Empty)
             {
                 int ForcePoint = forceMB[0];
                 GameData.ForceCutBeadList.Add(ForcePoint);

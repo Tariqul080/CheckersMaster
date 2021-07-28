@@ -36,7 +36,7 @@ public class GameViewModel : MonoBehaviour
 
         this.selectedBead = script;
         ind.HideMoveIndicators();
-        ind.MoveAllowPos(GameData.Gotopos, GameData.Board, board.SquareSize, board.allPositions, script.currentPos); // normal move
+        ind.MoveAllowPos(GameData.Gotopos, GameData.Board, GameData.kingBoard, board.SquareSize, board.allPositions, script.currentPos); // normal move
        
     }
 
@@ -83,13 +83,10 @@ public class GameViewModel : MonoBehaviour
     {
         // remove cut bead
         //RemoveCutBead();
-       // SetKing.SetBeadKing(GameData.Board, 1, Viewdata.beadData);
         currentPlayr = currentPlayr == 2 ? 1 : 2;
         bead.ActiveSite(currentPlayr);
-        CheakForceMove.CheakFM(GameData.Board, GameData.CutPosition, Viewdata.beadData, 1, 2, currentPlayr);
-        ind.HighliteMoveables(GameData.ForceCutBeadList, GameData.Gotopos, GameData.Board, 0, board.allPositions, currentPlayr);
-        //SetKing.SetBeadKing(GameData.Board, 1, Viewdata.beadData);
-
+        CheakForceMove.CheakFM(GameData.Board, GameData.CutPosition, GameData.kingBoard, currentPlayr);
+        ind.HighliteMoveables(GameData.ForceCutBeadList, GameData.Gotopos, GameData.Board, GameData.kingBoard, board.allPositions, currentPlayr);
         // promote king
         if (isPromoteKing)
         {
@@ -119,7 +116,7 @@ public class GameViewModel : MonoBehaviour
 
         board.DrowGameBoard();
         ind.StoreHighliteIndicators(board.SquareSize, ClickIndicator);
-        ind.HighliteMoveables(GameData.ForceCutBeadList, GameData.Gotopos, GameData.Board, 0, board.allPositions, currentPlayr);
+        ind.HighliteMoveables(GameData.ForceCutBeadList, GameData.Gotopos, GameData.Board, GameData.kingBoard, board.allPositions, currentPlayr);
         bead.DrowBeads(GameData.Board, board.SquareSize, board.allPositions, ClickBead);
         // active site
         bead.ActiveSite(currentPlayr);

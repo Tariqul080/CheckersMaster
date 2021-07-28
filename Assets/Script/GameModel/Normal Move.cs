@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace GameModel
 {
@@ -41,12 +42,9 @@ namespace GameModel
                         PromoteKing?.Invoke(to);
                     }
                 }
-                
                 return true;
             }
             return false;
         }
     }
-
-
 }
