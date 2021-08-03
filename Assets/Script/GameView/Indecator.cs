@@ -47,7 +47,7 @@ namespace View
         }
 
         //Cheaking Moveable Beads.
-        internal void HighliteMoveables(List<int> cutableBead, int[][] movePos, int[,]gameBoard, bool[,] kingBoard, Vector2[,]allPoints, int player)
+        internal void HighliteMoveables(List<int> cutableBead, int[][] movePos, int[,] gameBoard, bool[,] kingBoard, Vector2[,] allPoints, int player)
         {
             int counter = -1, indicatorCounter = 0, Empty = Viewdata.Empty;
             int indecatorValu = 0;
@@ -110,6 +110,11 @@ namespace View
                     }
                 }
             }
+            Viewdata.playerMove = -1;
+            Viewdata.Indecator = -1;
+            Viewdata.playerMove = player;
+            Viewdata.Indecator = indicatorCounter;
+            
         }
 
         //Move Point Identify..

@@ -1,9 +1,4 @@
 using System.Collections.Generic;
-using View;
-using UnityEngine;
-
-    
-
 namespace GameModel
 {
     public class CheakForceMove

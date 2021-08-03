@@ -1,6 +1,4 @@
 using System;
-using UnityEngine;
-
 namespace GameModel
 {
     public class NormalMove
@@ -25,6 +23,7 @@ namespace GameModel
             {
                 GameBoard[toPosition[0], toPosition[1]] = GameBoard[fromPosition[0], fromPosition[1]]; // move normal bead on Board Array
                 GameBoard[fromPosition[0], fromPosition[1]] = 0;
+                GameData.NormalM = true;
 
                 // check king move
                 if (GameData.kingBoard[fromPosition[0], fromPosition[1]]) // move King on king array

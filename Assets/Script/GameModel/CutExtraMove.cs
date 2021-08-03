@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 namespace GameModel
 {
-    public class CutExtraMove : MonoBehaviour
+    public class CutExtraMove
     {
         internal static int ExtraMoveIndex(int SbeadCurrentPos, int[][] cutMove, bool[,] king, int[,] GameBoard)
         {

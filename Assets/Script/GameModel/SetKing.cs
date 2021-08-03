@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using View;
-
 namespace GameModel
 {
     public class SetKing 

@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 namespace View
 {
-
     public class indecatorScript : MonoBehaviour
     {
         [SerializeField] private indecatorScript indeFeb = null;
