@@ -10,7 +10,7 @@ namespace View
         [SerializeField] private Sprite cutInd = null;
 
         private indecatorScript[] HighliteIndicators = new indecatorScript[32];
-        private indecatorScript[] moveIndicators = new indecatorScript[4];
+        internal indecatorScript[] moveIndicators = new indecatorScript[4];
         internal void StoreHighliteIndicators(Vector2 Size, Action<indecatorScript> ClickAction)
         {
             for (byte i = 0; i < 36; i++)
@@ -51,6 +51,7 @@ namespace View
         {
             int counter = -1, indicatorCounter = 0, Empty = Viewdata.Empty;
             int indecatorValu = 0;
+            Viewdata.HighliteMoveable.Clear();
             if (cutableBead.Count!=0)
             {
                 for (int i = 0; i < cutableBead.Count; i++)
@@ -105,6 +106,7 @@ namespace View
                         HighliteIndicators[indicatorCounter].transform.localPosition = allPoints[row, col];
                         HighliteIndicators[indicatorCounter].Active(true);
                         HighliteIndicators[indicatorCounter].currentpos = (row * 8) + col;
+                        Viewdata.HighliteMoveable.Add(counter);  //new adding 04-08-21.
                         indicatorCounter++;
                         indecatorValu = 0;
                     }

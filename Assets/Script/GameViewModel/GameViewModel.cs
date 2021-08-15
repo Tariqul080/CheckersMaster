@@ -111,7 +111,7 @@ public class GameViewModel : MonoBehaviour
                 }
             }
         }
-       // result.Result(Viewdata.Indecator , Viewdata.playerMove);
+      
     }
     private void PromoteKing(int kingPosition)
     {
