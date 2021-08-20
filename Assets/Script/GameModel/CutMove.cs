@@ -50,6 +50,7 @@ namespace GameModel
                 }
 
                 GameData.kingBoard[fromArrPos[0], fromArrPos[1]] = false;
+                GameData.kingBoard[cutBeadRow, cutBeadCol] = false;
 
                 return PositionToRC(cutBeadRow, cutBeadCol);
             }
