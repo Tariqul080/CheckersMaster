@@ -138,6 +138,7 @@ MonoBehaviour:
   DarkBead: {fileID: 21300000, guid: 1eddcd8184a986b4d9ae01f2263455be, type: 3}
   LightBead: {fileID: 21300000, guid: 19c02e0a4eb8afe489d238912b97b736, type: 3}
   KingImg: {fileID: 1959794633129592449}
+  rt: {fileID: 2183612284579333586}
 --- !u!1 &8725652754671510345
 GameObject:
   m_ObjectHideFlags: 0

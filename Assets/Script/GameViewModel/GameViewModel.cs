@@ -4,12 +4,13 @@ using GameModel;
 using MyPhoton;
 using Photon.Pun;
 using UnityEngine.UI;
-using System;
+using Helper;
 
 public class GameViewModel : MonoBehaviour
 {
     [Header("Common Ref")]
     [SerializeField] private DrowBoard board = null;
+    [SerializeField] private RectTransform boardTr = null;
     [SerializeField] private GameEnd result = null;
     [SerializeField] private DrowBead bead = null;
     [SerializeField] private Indecator ind = null;
@@ -24,8 +25,9 @@ public class GameViewModel : MonoBehaviour
     [SerializeField] private GameObject gameBoard = null;
 
 
-    internal static bool isMultiplayer = false;
+    internal bool isMultiplayer = false;
     private bool SendMultiplayerMoveToPhoton = false, IsItsMyMove = false, isMultiplayerWhite = false;
+
          
     private BeadScript selectedBead = null;
     private int currentPlayr = 2, cutPosition = -1;
@@ -128,15 +130,17 @@ public class GameViewModel : MonoBehaviour
             {
                 GameData.ForceCutBeadList.Clear();
                 GameData.ForceCutBeadList.Add(extraFM);
-                ind.HighliteMoveables(GameData.ForceCutBeadList, GameData.Gotopos, GameData.Board, GameData.kingBoard, board.allPositions, currentPlayr);
+                MultiPlayerMoveableBeadIndecatorAndNormal();
                 return;
             }
         }
         
         currentPlayr = currentPlayr == 2 ? 1 : 2;
-        bead.ActiveSite(currentPlayr);
+        ActiveSaide();
         CheakForceMove.CheakFM(GameData.Board, GameData.CutPosition, GameData.kingBoard, currentPlayr);
-        ind.HighliteMoveables(GameData.ForceCutBeadList, GameData.Gotopos, GameData.Board, GameData.kingBoard, board.allPositions, currentPlayr);
+        //new add.
+        MultiPlayerMoveableBeadIndecatorAndNormal();
+       
         GameData.NormalM = false;
         result.Result(Viewdata.Indecator , Viewdata.playerMove);
         
@@ -160,13 +164,23 @@ public class GameViewModel : MonoBehaviour
         promoteKingPos = kingPosition;
     }
 
-
     #region Multiplayer
     private void ReadyToGoMultiplayerGame(bool isMasterClient)
     {
         isMultiplayerWhite = isMasterClient;
         searchToplayer.SetActive(false);
         gameBoard.SetActive(true);
+
+        if (isMultiplayer && !isMultiplayerWhite)
+        {
+            boardTr.Rotate180Deg();
+
+            // rotate beads | fast
+            for (int i = 0, len = Viewdata.beadData.Count; i < len; i++)
+            {
+                Viewdata.beadData[i].GetRt().RotateAsParent(boardTr);
+            }
+        }
     }
 
     private void SentDataToPhoton(int from, int to, bool isCutMove)
@@ -207,11 +221,74 @@ public class GameViewModel : MonoBehaviour
     }
     private void Debuge(string sms)
     {
-        if (PrintDebug.gameObject.activeInHierarchy)
+        if (PrintDebug != null && PrintDebug.gameObject.activeInHierarchy)
             PrintDebug.text += sms + "\n";
     }
 
     #endregion
+
+    private void MultiPlayerMoveableBeadIndecatorAndNormal()
+    {
+        if (isMultiplayer)
+        {
+            if (isMultiplayerWhite && currentPlayr == 2)
+            {
+                ind.HighliteMoveables(GameData.ForceCutBeadList, GameData.Gotopos, GameData.Board, GameData.kingBoard, board.allPositions, currentPlayr);
+            }
+            else if (!isMultiplayerWhite && currentPlayr == 1)
+            {
+                ind.HighliteMoveables(GameData.ForceCutBeadList, GameData.Gotopos, GameData.Board, GameData.kingBoard, board.allPositions, currentPlayr);
+            }
+        }
+        else
+        {
+            ind.HighliteMoveables(GameData.ForceCutBeadList, GameData.Gotopos, GameData.Board, GameData.kingBoard, board.allPositions, currentPlayr);
+        }
+    }
+
+    private void ActiveSaide()
+    {
+        if (isMultiplayer)
+        {
+            if (isMultiplayerWhite && currentPlayr == 2)
+            {
+                bead.ActiveSite(currentPlayr);
+            }
+            else if (!isMultiplayerWhite && currentPlayr != 2)
+            {
+                bead.ActiveSite(currentPlayr);
+            }
+        }
+        else
+        {
+            bead.ActiveSite(currentPlayr);
+        }
+    }
+
+    private void StartGame(bool isMultiplayer)
+    {
+        this.isMultiplayer = isMultiplayer;
+        ActiveSaide();
+        MultiPlayerMoveableBeadIndecatorAndNormal();
+
+        if (!isMultiplayer && boardTr.rotation.z != 0)
+        {
+            if (boardTr.rotation.z != 0)
+            {
+                boardTr.Rotate0Deg();
+            }
+
+            //using foreach loop | too slow
+            //foreach (var item in Viewdata.beadData)
+            //    {
+            //        item.GetRt().Rotate0Deg();
+            //    }
+            for (int i = 0, len = Viewdata.beadData.Count; i < len; i++)
+            {
+                Viewdata.beadData[i].GetRt().RotateAsParent(boardTr);
+            }
+        }
+    }
 
     void Start()
     {
@@ -220,18 +297,15 @@ public class GameViewModel : MonoBehaviour
         NormalMove.PromoteKing += PromoteKing;
         board.DrowGameBoard();
         ind.StoreHighliteIndicators(board.SquareSize, ClickIndicator);
-        ind.HighliteMoveables(GameData.ForceCutBeadList, GameData.Gotopos, GameData.Board, GameData.kingBoard, board.allPositions, currentPlayr);
+
         bead.DrowBeads(GameData.Board, board.SquareSize, board.allPositions, ClickBead);
         // active site
-        bead.ActiveSite(currentPlayr);
-
         // add multiplayer methods
         Server.IsReadyToGO += ReadyToGoMultiplayerGame;
         Server.DataFromPhoton += DataFromPhotonServer;
         Server.DebugText += Debuge;
         gameStart.OnMatching += OnConnected;
-        
-
+        gameStart.StartGame += StartGame;
     }
     private void OnDisable()
     {
@@ -242,5 +316,8 @@ public class GameViewModel : MonoBehaviour
         Server.DataFromPhoton -= DataFromPhotonServer;
         Server.DebugText -= Debuge;
         gameStart.OnMatching -= OnConnected;
+        gameStart.StartGame -= StartGame;
     }
+
+    
 }

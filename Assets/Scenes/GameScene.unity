@@ -683,7 +683,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.19607845, g: 0.1764706, b: 0.10588236, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1209,6 +1209,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   beadFeb: {fileID: 8710926982657360484, guid: 8f1cfdf7042aa20418dd023e6d6235d7, type: 3}
+  beadParent: {fileID: 0}
 --- !u!114 &973081396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1833,6 +1834,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   board: {fileID: 973081394}
+  boardTr: {fileID: 973081393}
   result: {fileID: 1442177290}
   bead: {fileID: 973081395}
   ind: {fileID: 973081396}

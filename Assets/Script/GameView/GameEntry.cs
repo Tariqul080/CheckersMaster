@@ -14,19 +14,20 @@ namespace View
         [SerializeField] private Button JoinToServer = null;
 
         internal Action OnMatching = null;
+        internal Action<bool> StartGame = null;
 
         private void Start()
         {
             PlayerVsPlayer.onClick.AddListener(delegate
             {
-                GameViewModel.isMultiplayer = false;
+                StartGame?.Invoke(false);
                 GameBoard.SetActive(true);
                 Lobby.SetActive(false);
             });
 
             OnlinePlay.onClick.AddListener(delegate
             {
-                GameViewModel.isMultiplayer = true;
+                StartGame?.Invoke(true);
                 ConnectToServer.SetActive(true);
                 Lobby.SetActive(false);
             });

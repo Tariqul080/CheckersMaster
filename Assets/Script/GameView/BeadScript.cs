@@ -10,12 +10,18 @@ namespace View
         [SerializeField] private Sprite DarkBead = null;
         [SerializeField] private Sprite LightBead = null;
         [SerializeField] private Image KingImg = null;
+        [SerializeField] private RectTransform rt = null;
 
         internal int currentPos= -1;
         internal int beadID = -1;
         internal int bead = -1;
         internal bool isKing = false;
         internal bool isAlive = true;
+
+        internal RectTransform GetRt()
+        {
+            return rt;
+        }
 
         internal void SetOnClick(Action<BeadScript> click)
         {

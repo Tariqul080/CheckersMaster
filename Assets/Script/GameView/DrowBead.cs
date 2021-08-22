@@ -6,6 +6,7 @@ namespace View
     public class DrowBead :MonoBehaviour
     {
         [SerializeField] private  BeadScript beadFeb = null;
+
         private Action<int> BeadInteractables = null;
 
         internal void DrowBeads(int[,] boardFormate,Vector2 SquareSize,Vector2[,]allPositions,Action<BeadScript>clickAction)
