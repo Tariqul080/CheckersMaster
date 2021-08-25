@@ -15,6 +15,7 @@ namespace View
 
         internal Action OnMatching = null;
         internal Action<bool> StartGame = null;
+        internal Action LeaveToServer = null;
 
         private void Start()
         {
@@ -37,7 +38,7 @@ namespace View
                 JoinToServer.interactable=false;
                 OnMatching?.Invoke();
             });
-            
+
         }
        
 

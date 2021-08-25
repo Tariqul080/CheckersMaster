@@ -26,11 +26,11 @@ public class GameViewModel : MonoBehaviour
 
 
     internal bool isMultiplayer = false;
-    private bool SendMultiplayerMoveToPhoton = false, IsItsMyMove = false, isMultiplayerWhite = false;
+    internal bool SendMultiplayerMoveToPhoton = false, IsItsMyMove = false, isMultiplayerWhite = false;
 
          
     private BeadScript selectedBead = null;
-    private int currentPlayr = 2, cutPosition = -1;
+    private int currentPlayr = 2, /*it is change after every move*/ cutPosition = -1;
 
     // Promote King
     private bool isPromoteKing = false;
@@ -52,6 +52,7 @@ public class GameViewModel : MonoBehaviour
             }
         }
         this.selectedBead = script;
+        if (selectedBead.bead != currentPlayr) return; // This funtion Remove Multiplayer ExtraTab plb.
         ind.HideMoveIndicators();
         ind.MoveAllowPos(GameData.Gotopos, GameData.Board, GameData.kingBoard, board.SquareSize, board.allPositions, script.currentPos); // normal move
     }
@@ -118,7 +119,6 @@ public class GameViewModel : MonoBehaviour
             IsItsMyMove = true;
             SentDataToPhoton(from, to, isCutMove);
         }
-
         RemoveCutBead();
     }
     private void MoveComplete() // invoke after complete a move
@@ -170,6 +170,9 @@ public class GameViewModel : MonoBehaviour
         isMultiplayerWhite = isMasterClient;
         searchToplayer.SetActive(false);
         gameBoard.SetActive(true);
+
+        MultiPlayerMoveableBeadIndecatorAndNormal();
+        ActiveSaide();
 
         if (isMultiplayer && !isMultiplayerWhite)
         {
@@ -224,7 +227,6 @@ public class GameViewModel : MonoBehaviour
         if (PrintDebug != null && PrintDebug.gameObject.activeInHierarchy)
             PrintDebug.text += sms + "\n";
     }
-
     #endregion
 
     private void MultiPlayerMoveableBeadIndecatorAndNormal()
@@ -253,8 +255,9 @@ public class GameViewModel : MonoBehaviour
             if (isMultiplayerWhite && currentPlayr == 2)
             {
                 bead.ActiveSite(currentPlayr);
+
             }
-            else if (!isMultiplayerWhite && currentPlayr != 2)
+            else if (!isMultiplayerWhite && currentPlayr == 1)
             {
                 bead.ActiveSite(currentPlayr);
             }
@@ -263,13 +266,18 @@ public class GameViewModel : MonoBehaviour
         {
             bead.ActiveSite(currentPlayr);
         }
+      
     }
 
     private void StartGame(bool isMultiplayer)
     {
         this.isMultiplayer = isMultiplayer;
-        ActiveSaide();
-        MultiPlayerMoveableBeadIndecatorAndNormal();
+
+        if (!isMultiplayer)
+        {
+            MultiPlayerMoveableBeadIndecatorAndNormal();
+            ActiveSaide();
+        }
 
         if (!isMultiplayer && boardTr.rotation.z != 0)
         {
@@ -306,6 +314,7 @@ public class GameViewModel : MonoBehaviour
         Server.DebugText += Debuge;
         gameStart.OnMatching += OnConnected;
         gameStart.StartGame += StartGame;
+       
     }
     private void OnDisable()
     {
@@ -317,7 +326,7 @@ public class GameViewModel : MonoBehaviour
         Server.DebugText -= Debuge;
         gameStart.OnMatching -= OnConnected;
         gameStart.StartGame -= StartGame;
-    }
 
+    }
     
 }

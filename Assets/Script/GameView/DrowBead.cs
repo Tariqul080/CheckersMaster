@@ -8,6 +8,7 @@ namespace View
         [SerializeField] private  BeadScript beadFeb = null;
 
         private Action<int> BeadInteractables = null;
+        GameViewModel instance = new GameViewModel();
 
         internal void DrowBeads(int[,] boardFormate,Vector2 SquareSize,Vector2[,]allPositions,Action<BeadScript>clickAction)
         {
@@ -38,6 +39,7 @@ namespace View
         }
         internal void ActiveSite(int bead)
         {
+            
             BeadInteractables?.Invoke(bead);
         }
     }

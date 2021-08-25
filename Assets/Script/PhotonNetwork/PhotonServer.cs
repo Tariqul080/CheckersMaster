@@ -49,6 +49,7 @@ namespace MyPhoton
             if (PhotonNetwork.IsConnected)
             {
                 PhotonNetwork.LeaveLobby();
+                PhotonNetwork.Disconnect();
             }
         }
 
