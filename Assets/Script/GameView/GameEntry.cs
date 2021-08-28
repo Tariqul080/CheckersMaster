@@ -12,6 +12,8 @@ namespace View
         [SerializeField] private GameObject Lobby = null;
         [SerializeField] private GameObject ConnectToServer = null;
         [SerializeField] private Button JoinToServer = null;
+        [SerializeField] private GameObject PlayGameBackground = null;
+        [SerializeField] private GameObject GameBackground = null;
 
         internal Action OnMatching = null;
         internal Action<bool> StartGame = null;
@@ -22,6 +24,8 @@ namespace View
             PlayerVsPlayer.onClick.AddListener(delegate
             {
                 StartGame?.Invoke(false);
+                GameBackground.SetActive(false);
+                PlayGameBackground.SetActive(true);
                 GameBoard.SetActive(true);
                 Lobby.SetActive(false);
             });
@@ -29,6 +33,8 @@ namespace View
             OnlinePlay.onClick.AddListener(delegate
             {
                 StartGame?.Invoke(true);
+                GameBackground.SetActive(false);
+                PlayGameBackground.SetActive(true);
                 ConnectToServer.SetActive(true);
                 Lobby.SetActive(false);
             });
