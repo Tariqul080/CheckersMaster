@@ -41,7 +41,7 @@ namespace View
                 }
                 IsWhiteTails = !IsWhiteTails;
             }
-
+            
         }
 
       
