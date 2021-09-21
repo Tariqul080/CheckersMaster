@@ -135,8 +135,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BeadPrefeb: {fileID: 601637763303553027}
-  DarkBead: {fileID: 21300000, guid: 1eddcd8184a986b4d9ae01f2263455be, type: 3}
-  LightBead: {fileID: 21300000, guid: 19c02e0a4eb8afe489d238912b97b736, type: 3}
+  DarkBead1: {fileID: 21300000, guid: 54f8700210ae0504d9776c2b7ac2166e, type: 3}
+  LightBead1: {fileID: 21300000, guid: 39f4408633d0f844fa308db1e22516b7, type: 3}
+  DarkBead2: {fileID: 21300000, guid: 6eb7743b8dacb9d4d8168e01bbbba0b3, type: 3}
+  LightBead2: {fileID: 21300000, guid: 1ec4a33dbe189ba479c3b99451d740dd, type: 3}
+  DarkBead3: {fileID: 21300000, guid: 9d1179c41515b114f866379d63aa6f41, type: 3}
+  LightBead3: {fileID: 21300000, guid: 2e7a91ce79982954ca98a407a43ccec6, type: 3}
   KingImg: {fileID: 1959794633129592449}
   rt: {fileID: 2183612284579333586}
 --- !u!1 &8725652754671510345

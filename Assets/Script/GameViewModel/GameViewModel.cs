@@ -5,6 +5,7 @@ using MyPhoton;
 using Photon.Pun;
 using UnityEngine.UI;
 using Helper;
+using settings;
 
 public class GameViewModel : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class GameViewModel : MonoBehaviour
     [SerializeField] private DrowBead bead = null;
     [SerializeField] private Indecator ind = null;
     [SerializeField] private MovebeadScript moveBead = null;
+    [SerializeField] private Settings ChangeBoadAndBead = null;
 
     [Header("Photon Ref")]
     [SerializeField] private PhotonServer Server = null;
@@ -23,12 +25,17 @@ public class GameViewModel : MonoBehaviour
     [SerializeField] private GameEntry gameStart = null;
     [SerializeField] private GameObject searchToplayer = null;
     [SerializeField] private GameObject gameBoard = null;
+    [SerializeField] private Text PlayerMove = null;
 
 
     internal bool isMultiplayer = false;
     internal bool SendMultiplayerMoveToPhoton = false, IsItsMyMove = false, isMultiplayerWhite = false;
+    private string Player1 = "Dark PLayer", Player2 = "Light Player";
 
-         
+
+
+    int BoardModelNumber = -1;
+
     private BeadScript selectedBead = null;
     private int currentPlayr = 2, /*it is change after every move*/ cutPosition = -1;
 
@@ -255,16 +262,26 @@ public class GameViewModel : MonoBehaviour
             if (isMultiplayerWhite && currentPlayr == 2)
             {
                 bead.ActiveSite(currentPlayr);
+                PlayerMove.text = Player2;
 
             }
             else if (!isMultiplayerWhite && currentPlayr == 1)
             {
                 bead.ActiveSite(currentPlayr);
+                PlayerMove.text = Player1;
             }
         }
         else
         {
             bead.ActiveSite(currentPlayr);
+            if (currentPlayr == 2)
+            {
+                PlayerMove.text = Player2;
+            }
+            else
+            {
+                PlayerMove.text = Player1;
+            };
         }
       
     }
@@ -285,28 +302,40 @@ public class GameViewModel : MonoBehaviour
             {
                 boardTr.Rotate0Deg();
             }
-
-            //using foreach loop | too slow
-            //foreach (var item in Viewdata.beadData)
-            //    {
-            //        item.GetRt().Rotate0Deg();
-            //    }
+           
             for (int i = 0, len = Viewdata.beadData.Count; i < len; i++)
             {
                 Viewdata.beadData[i].GetRt().RotateAsParent(boardTr);
             }
         }
     }
+    private void BoardChanger()
+    {
+        BoardModelNumber = ChangeBoadAndBead.BoardCounter;
+      
+    }
+
+    private void BoardSetting()
+    {
+        BoardChanger();
+        board.DrowGameBoard(BoardModelNumber);
+        ind.StoreHighliteIndicators(board.SquareSize, ClickIndicator);
+        bead.DrowBeads(GameData.Board, board.SquareSize, board.allPositions, ClickBead);
+        ind.HighliteMoveables(GameData.ForceCutBeadList, GameData.Gotopos, GameData.Board, GameData.kingBoard, board.allPositions, currentPlayr);
+        ActiveSaide();
+    }
+    
 
     void Start()
     {
         moveBead.MoveStart += MoveStart;
         moveBead.MoveComplete += MoveComplete;
         NormalMove.PromoteKing += PromoteKing;
-        board.DrowGameBoard();
+        BoardChanger();
+        board.DrowGameBoard(BoardModelNumber);
         ind.StoreHighliteIndicators(board.SquareSize, ClickIndicator);
-
         bead.DrowBeads(GameData.Board, board.SquareSize, board.allPositions, ClickBead);
+        gameStart.BoardAndBeadSetting += BoardSetting;
         // active site
         // add multiplayer methods
         Server.IsReadyToGO += ReadyToGoMultiplayerGame;
@@ -326,6 +355,8 @@ public class GameViewModel : MonoBehaviour
         Server.DebugText -= Debuge;
         gameStart.OnMatching -= OnConnected;
         gameStart.StartGame -= StartGame;
+        BoardModelNumber = 1;
+        gameStart.BoardAndBeadSetting -= BoardSetting;
 
     }
     
