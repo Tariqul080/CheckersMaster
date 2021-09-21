@@ -4,10 +4,13 @@ namespace GameModel
     public static class GameData
     {
         internal static List<int> ForceCutBeadList = new List<int>();
+
+        internal const int TopBead = 1, BottomBead = 2, Empty = 0;
+
+        internal static bool NormalM = false;
         
         public static readonly int[,] Board =
-         {
-
+       {
             {0, 1, 0, 1, 0, 1, 0, 1 },
             {1, 0, 1, 0, 1, 0, 1, 0 },
             {0, 1, 0, 1, 0, 1, 0, 1 },
@@ -17,22 +20,23 @@ namespace GameModel
             {0, 2, 0, 2, 0, 2, 0, 2 },
             {2, 0, 2, 0, 2, 0, 2, 0 },
 
-         };
+           /* {0, 0, 0, 0, 0, 0, 0, 0 },
+            {0, 0, 0, 0, 1, 0, 1, 0 },
+            {0, 0, 0, 1, 0, 0, 0, 2 },
+            {0, 0, 0, 0, 0, 0, 0, 0 },
+            {0, 0, 0, 0, 0, 0, 0, 0 },
+            {0, 0, 0, 0, 0, 0, 0, 0 },
+            {0, 0, 0, 0, 0, 0, 0, 0 },
+            {2, 0, 2, 0, 2, 0, 2, 0 },*/
+            
 
-         internal static readonly bool[,] KingBoard =
-         {
-            {true,  true,  true,  true,  true,  true,  true,   true},
-            {false, false, false, false, false, false, false, false},
-            {false, false, false, false, false, false, false, false},
-            {false, false, false, false, false, false, false, false},
-            {false, false, false, false, false, false, false, false},
-            {false, false, false, false, false, false, false, false},
-            {false, false, false, false, false, false, false, false},
-            {true,  true,  true,  true,  true,  true,  true,   true},
-         };
+        };
+
+        // store king position info
+        public static bool[,] kingBoard = new bool[8, 8];
 
         internal static readonly int[][] Gotopos =
-         {
+        {
             new int[]{0,0,0},      //0
             new int[]{8,10},       //1
             new int[]{0,0,0},      //2
@@ -97,7 +101,7 @@ namespace GameModel
             new int[]{0,0,0},      //61
             new int[]{53,55},      //62
             new int[]{0,0,0},      //63
-         };
+        };
 
         internal static readonly int[][] CutPosition =
         {
@@ -125,7 +129,7 @@ namespace GameModel
             new int[]{35,39,3,7},  //21
             new int[]{0,0,0},      //22
             new int[]{37,5},       //23
-            new int[]{24,42},      //24
+            new int[]{10,42},      //24
             new int[]{0,0,0},      //25
             new int[]{8,44,12,40}, //26
             new int[]{0,0,0},      //27

@@ -1,5 +1,5 @@
 using System;
-
+using UnityEngine;
 namespace GameModel
 {
     public class CutMove
@@ -28,9 +28,30 @@ namespace GameModel
             int valu = GameBoard[cutBeadRow, cutBeadCol];
             if (valu!=0)
             {
-                GameBoard[toArrpos[0], toArrpos[1]] = GameBoard[fromArrPos[0], fromArrPos[1]];
+                GameBoard[toArrpos[0], toArrpos[1]] = GameBoard[fromArrPos[0], fromArrPos[1]]; // normal bead move on backend
                 GameBoard[fromArrPos[0], fromArrPos[1]] = 0;
                 GameBoard[cutBeadRow, cutBeadCol] = 0;
+
+                // check king move
+                if (GameData.kingBoard[fromArrPos[0], fromArrPos[1]])  // king move on backend
+                {
+                    GameData.kingBoard[toArrpos[0], toArrpos[1]] = true;
+                    GameData.kingBoard[cutBeadRow, cutBeadCol] = false;
+                }
+                else
+                {
+                    // check promote king
+                    bool promoteKing = SetKing.IsPromoteKing(GameBoard[toArrpos[0], toArrpos[1]], toArrpos[0]);
+                    if (promoteKing)
+                    {
+                        GameData.kingBoard[toArrpos[0], toArrpos[1]] = true; // backend king
+                        NormalMove.PromoteKing?.Invoke(to);
+                    } 
+                }
+
+                GameData.kingBoard[fromArrPos[0], fromArrPos[1]] = false;
+                GameData.kingBoard[cutBeadRow, cutBeadCol] = false;
+
                 return PositionToRC(cutBeadRow, cutBeadCol);
             }
             return -1;

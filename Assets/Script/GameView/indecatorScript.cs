@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 namespace View
 {
-
     public class indecatorScript : MonoBehaviour
     {
         [SerializeField] private indecatorScript indeFeb = null;
@@ -19,10 +18,8 @@ namespace View
             IndecatorFeb.onClick.AddListener(delegate
             {
                 click?.Invoke(this);
-                Debug.Log("currentpos" + currentpos);
             });
         }
-
         internal void Active(bool isActive)
         {
             IndecatorFeb.interactable = isActive;
